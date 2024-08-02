@@ -10,7 +10,7 @@ const pool = new Pool({
 
 async function createTables(){
   try {
-    await pool.connect();
+    pool.connect();
     await pool.query(`
       CREATE TABLE IF NOT EXISTS "manage-task".users (
         id UUID PRIMARY KEY,
@@ -39,7 +39,6 @@ async function createTables(){
         user_id UUID REFERENCES "manage-task".users(id)
       );
     `)
-    console.log("todas as tabelas criadas");
   } catch (error) {
     console.log(error);
     throw error
