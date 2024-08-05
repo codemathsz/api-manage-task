@@ -42,8 +42,6 @@ async function createTables(){
   } catch (error) {
     console.log(error);
     throw error
-  }finally{
-    await pool.end()
   }
 }
 
