@@ -12,7 +12,7 @@ async function createTables(){
   try {
     pool.connect();
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS "manage-task".users (
+      CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY,
         name VARCHAR(255) NOT NULL, 
         email VARCHAR(255) UNIQUE NOT NULL,
@@ -20,23 +20,23 @@ async function createTables(){
         dateBirth DATE NOT NULL
       );
 
-      CREATE TABLE IF NOT EXISTS "manage-task".taskCategory (
+      CREATE TABLE IF NOT EXISTS taskCategory (
         id UUID PRIMARY KEY,
         displayName VARCHAR(255) NOT NULL
       );
 
-      CREATE TABLE IF NOT EXISTS "manage-task".taskStatus (
+      CREATE TABLE IF NOT EXISTS taskStatus (
         id UUID PRIMARY KEY,
         displayName VARCHAR(255) NOT NULL
       );
 
-      CREATE TABLE IF NOT EXISTS "manage-task".task (
+      CREATE TABLE IF NOT EXISTS task (
         id UUID PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         createDate DATE NOT NULL,
-        category_id UUID REFERENCES "manage-task".taskCategory(id),
-        status_id UUID REFERENCES "manage-task".taskStatus(id),
-        user_id UUID REFERENCES "manage-task".users(id)
+        category_id UUID REFERENCES taskCategory(id),
+        status_id UUID REFERENCES taskStatus(id),
+        user_id UUID REFERENCES users(id)
       );
     `)
   } catch (error) {
