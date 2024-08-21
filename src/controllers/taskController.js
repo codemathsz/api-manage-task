@@ -3,16 +3,18 @@ const { getTasks, createTask } = require("../models/task");
 const createTaskController = async (req, res) =>{
   try {
     let body = '';
-    let title = ''
+    let data
     req.on('data', (chunk) => { //define um evento que é acionado sempre que um novo chunk de dados é recebido.
       body += chunk;
-      console.log(body);
     });
     req.on('end', async () => { //O evento end é acionado quando todos os dados da requisição foram recebidos.
       const parsedBody = JSON.parse(body);
-      title = parsedBody.title;
+      data = {
+        title: parsedBody.title || null,
+        createDate: parsedBody.createDate || null
+      }
       try {
-        await createTask(title)
+        await createTask(res,data)
         res.writeHead(201, { 'Content-Type': 'text/plain' });
         res.end('Tarefa criada com sucesso!');
       } catch (error) {

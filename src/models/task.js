@@ -2,16 +2,15 @@ require('dotenv').config();
 const pool = require('../db');
 const uuid4 = require('../utils/uuid');
 
-async function createTask(title){
-  if(!title){
-    res.writeHead(500, { 'Content-Type': 'text/plain' });
-    res.end('Titulo da tarefa não recebido');
+async function createTask(res,data){
+  if(!data.title  || !data.createDate){
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end("ERRO_DADOS_OBRIGATÓRIOS_NÃO_ENVIADOS " +JSON.stringify(data));
+    return
   }
   try {
     const id = uuid4()
-    console.log(id);
-    console.log(title);
-    const query = `INSERT INTO "manage-task".task("ID", name) VALUES('${id}','${title}')`
+    const query = `INSERT INTO task(id, title,createDate ) VALUES('${id}','${data.title}','${data.createDate}')`
     await pool.query(query)
   } catch (error) {
     console.log("Erro ao criar `tasks`: ", error); 
@@ -21,7 +20,7 @@ async function createTask(title){
 
 async function getTasks(){
   try {
-    const query = `SELECT * FROM "manage-task".task`
+    const query = `SELECT * FROM task`
     const result = await pool.query(query)
     return result.rows;
   } catch (error) {
